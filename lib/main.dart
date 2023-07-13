@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -157,7 +156,23 @@ class BugReportsList extends StatelessWidget {
               final bugReport = snapshot.data!.docs[index];
               final bugNumber = bugReport['bugNumber'];
               final bugTitle = bugReport['bugTitle'];
+              final priority = bugReport['priority'];
               final isFixed = bugReport['status'] == 'fixed';
+
+              Color getPriorityColor(String priority) {
+                switch (priority) {
+                  case 'high':
+                    return Colors.red;
+                  case 'mid':
+                    return Colors.orange;
+                  case 'low':
+                    return Colors.yellow;
+                  case 'wish':
+                    return Colors.lightBlue;
+                  default:
+                    return Colors.black;
+                }
+              }
 
               return Card(
                 elevation: 2,
@@ -165,11 +180,17 @@ class BugReportsList extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: ListTile(
-                  title: Text('Bug #$bugNumber'),
+                  title: Text(
+                    'Bug #$bugNumber',
+                    style: TextStyle(
+                        color: getPriorityColor(priority),
+                        fontWeight: FontWeight.bold),
+                  ),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Title: $bugTitle'),
+                      Text('Priority: ${priority ?? ' '}'),
                       Text('Status: ${isFixed ? 'Fixed' : 'Active'}'),
                     ],
                   ),
@@ -208,6 +229,8 @@ class BugReportsubmissionScreen extends StatefulWidget {
 class _BugReportsubmissionScreenState extends State<BugReportsubmissionScreen> {
   final TextEditingController _bugNumberController = TextEditingController();
   final TextEditingController _bugTitleController = TextEditingController();
+  String _selectedPriority = 'low';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -227,8 +250,52 @@ class _BugReportsubmissionScreenState extends State<BugReportsubmissionScreen> {
                 controller: _bugTitleController,
                 decoration: const InputDecoration(labelText: 'Bug Title'),
               ),
-              // const SizedBox(height: 16.0),
-              // const Text('Priority:'),
+              const SizedBox(height: 16.0),
+              const Text('Priority:'),
+              Row(
+                children: [
+                  Radio(
+                    value: 'High',
+                    groupValue: _selectedPriority,
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedPriority = value.toString();
+                      });
+                    },
+                  ),
+                  const Text('High'),
+                  Radio(
+                    value: 'Mid',
+                    groupValue: _selectedPriority,
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedPriority = value.toString();
+                      });
+                    },
+                  ),
+                  const Text('Mid'),
+                  Radio(
+                    value: 'Low',
+                    groupValue: _selectedPriority,
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedPriority = value.toString();
+                      });
+                    },
+                  ),
+                  const Text('Low'),
+                  Radio(
+                    value: 'Wish',
+                    groupValue: _selectedPriority,
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedPriority = value.toString();
+                      });
+                    },
+                  ),
+                  const Text('Wish'),
+                ],
+              ),
               ElevatedButton(
                 onPressed: () {
                   _submitBugReport(context);
@@ -244,7 +311,6 @@ class _BugReportsubmissionScreenState extends State<BugReportsubmissionScreen> {
     final bugNumber = _bugNumberController.text;
     final bugTitle = _bugTitleController.text;
     const status = 'active';
-    // String _selectedPriority = 'low'; // Set the initial status to 'active'
 
     if (bugNumber.isNotEmpty && bugTitle.isNotEmpty) {
       // Save the bug report to Firestore
@@ -252,10 +318,14 @@ class _BugReportsubmissionScreenState extends State<BugReportsubmissionScreen> {
         'bugNumber': bugNumber,
         'bugTitle': bugTitle,
         'status': status,
+        'priority': _selectedPriority
       }).then((value) {
         // Clear the input fields after successful submission
         _bugNumberController.clear();
         _bugTitleController.clear();
+        setState(() {
+          _selectedPriority = 'low';
+        });
 
         // Display a success message
         ScaffoldMessenger.of(context).showSnackBar(
