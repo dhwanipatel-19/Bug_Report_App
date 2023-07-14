@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,9 +16,18 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Bug Report',
-      theme: ThemeData(
-        primarySwatch: Colors.blueGrey,
-      ),
+      theme: ThemeData.dark().copyWith(
+          primaryColor: const Color.fromARGB(116, 40, 39, 39),
+          scaffoldBackgroundColor: const Color.fromARGB(116, 40, 39, 39),
+          appBarTheme: const AppBarTheme(
+            color: Colors.blueGrey,
+            systemOverlayStyle: SystemUiOverlayStyle.dark,
+          ),
+          bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+            backgroundColor: Color.fromARGB(116, 40, 39, 39),
+            selectedItemColor: Colors.white,
+            unselectedItemColor: Colors.grey,
+          )),
       home: const BugReportScreen(),
     );
   }
@@ -40,7 +50,7 @@ class _BugReportScreenState extends State<BugReportScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Bug report'),
+          title: const Text('BUG REPORT'),
         ),
         body: _buildScreen(),
         bottomNavigationBar: BottomNavigationBar(
@@ -106,6 +116,7 @@ class ActiveBugsScreen extends StatelessWidget {
     return Scaffold(
       body: const BugReportsList(status: 'active'),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.blueGrey,
         onPressed: () {
           Navigator.push(
               context,
@@ -170,12 +181,13 @@ class BugReportsList extends StatelessWidget {
                   case 'wish':
                     return Colors.lightBlue;
                   default:
-                    return Colors.black;
+                    return Colors.black54;
                 }
               }
 
               return Card(
                 elevation: 2,
+                color: const Color.fromARGB(98, 90, 88, 88),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -297,6 +309,9 @@ class _BugReportsubmissionScreenState extends State<BugReportsubmissionScreen> {
                 ],
               ),
               ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.blueGrey)),
                 onPressed: () {
                   _submitBugReport(context);
                 },
