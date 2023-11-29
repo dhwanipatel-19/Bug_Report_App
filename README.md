@@ -1,16 +1,17 @@
-# report
+# Bug Report App
 
 A new Flutter project.
 
-## Getting Started
+# ScreenShots:
 
-This project is a starting point for a Flutter application.
+## Add New Bug:
+![Add bug](Add_Bugs.jpg)
+![Add bug](Add_Bugs_2.jpg)
 
-A few resources to get you started if this is your first Flutter project:
+## Active Bugs Report
+![Active bugs](Active_Bugs.jpg)
+![Active bugs](Active_Bugs_2.jpg)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Fixed Bugs Report
+![Fixed bugs](Fixed_Bugs.jpg)
+![Fixed bugs](Fixed_Bugs_2.jpg)
